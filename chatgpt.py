@@ -8,7 +8,7 @@ from mmpy_bot import Message
 from redis_rate_limit import RateLimit, TooManyRequests
 
 MODEL = "gpt-3.5-turbo-0301"
-ADMINS = []  # put admins in here to prepopulate the redis db
+ADMINS = ["l33klin"]  # put admins in here to prepopulate the redis db
 USERS = []  # put users in here to prepopulate the redis db
 REDIS_PREPEND = "thread_"
 PRICE_PER_TOKEN = 0.002/1000
@@ -84,7 +84,8 @@ class ChatGPT(Plugin):
 
     def is_user(self, username):
         """check if user is user"""
-        return True if username in self.redis.smembers("users") else False
+        return True
+        # return True if username in self.redis.smembers("users") else False
 
     def is_admin(self, username):
         """check if user is admin"""

@@ -4,7 +4,9 @@ from environs import Env
 from mmpy_bot import Bot, Settings
 from chatgpt import ChatGPT
 env = Env()
-log_channel = env.str("MM_BOT_LOG_CHANNEL")
+env.read_env()
+# log_channel = env.str("MM_BOT_LOG_CHANNEL")
+log_channel = None
 openai_api_key = env.str("OPENAI_API_KEY")
 bot = Bot(
     settings=Settings(
