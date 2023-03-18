@@ -1,0 +1,13 @@
+version: '3'
+
+services:
+  bot:
+    build: .
+    environment:
+      REDIS_HOST: redis
+    command: ['python', 'bot.py']
+
+  redis:
+    image: redis
+    expose:
+      - "6379"

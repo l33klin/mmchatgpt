@@ -13,6 +13,7 @@ USERS = []  # put users in here to prepopulate the redis db
 REDIS_PREPEND = "thread_"
 PRICE_PER_TOKEN = 0.002/1000
 DOLLAR_TO_DKK = 6.5
+REDIS_PORT = 6379
 
 
 class ChatGPT(Plugin):
@@ -33,12 +34,12 @@ class ChatGPT(Plugin):
 
     SETTINGS_KEY = "chatgpt_settings"
 
-    def __init__(self, openai_api_key=None, log_channel=None):
+    def __init__(self, openai_api_key=None, log_channel=None, redis_host="localhost"):
         super().__init__()
         self.name = "ChatGPT"
         self.model = MODEL
         self.redis = redis.Redis(
-            host="localhost", port=6379, db=0, decode_responses=True)
+            host=redis_host, port=REDIS_PORT, db=0, decode_responses=True)
         if self.redis.scard("admins") <= 0 and len(ADMINS) > 0:
             self.redis.sadd("admins", *ADMINS)
         if self.redis.scard("users") <= 0 and len(USERS) > 0:
