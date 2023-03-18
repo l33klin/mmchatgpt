@@ -2,3 +2,4 @@ openai==0.27.2
 redis==4.5.1
 mmpy-bot==2.1.1
 environs==9.5.0
+python-redis-rate-limit==0.0.8
