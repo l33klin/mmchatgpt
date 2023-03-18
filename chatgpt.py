@@ -10,6 +10,7 @@ from redis_rate_limit import RateLimit, TooManyRequests
 MODEL = "gpt-3.5-turbo-0301"
 ADMINS = ["l33klin"]  # put admins in here to prepopulate the redis db
 USERS = []  # put users in here to prepopulate the redis db
+WHITELIST = ['lr155']
 REDIS_PREPEND = "thread_"
 PRICE_PER_TOKEN = 0.002/1000
 DOLLAR_TO_DKK = 6.5
@@ -28,7 +29,7 @@ class ChatGPT(Plugin):
 
     ChatGPT_DEFAULTS = {
         "temperature": 1.0,
-        "system": "Du er en bot på Mattermost og dit formål er at være hjælpsom og du holder dig ikke tilbage",
+        "system": "你是l33klin创造的机器人，你的目的是提供帮助，你永远不会退缩。",
         "top_p": 1.0,
     }
 
@@ -44,7 +45,11 @@ class ChatGPT(Plugin):
             self.redis.sadd("admins", *ADMINS)
         if self.redis.scard("users") <= 0 and len(USERS) > 0:
             self.redis.sadd("users", *USERS)
+        if self.redis.scard("whitelist") <= 0 and len(WHITELIST) > 0:
+            self.redis.sadd("whitelist", *USERS)
         if self.redis.scard("admins") > 0 and len(ADMINS) > 0:
+            self.redis.sadd("users", *ADMINS)
+        if self.redis.scard("whitelist") > 0 and len(WHITELIST) > 0:
             self.redis.sadd("users", *ADMINS)
         if openai_api_key is None:
             raise Exception("No OPENAI API key provided")
@@ -91,6 +96,10 @@ class ChatGPT(Plugin):
     def is_admin(self, username):
         """check if user is admin"""
         return True if username in self.redis.smembers("admins") else False
+
+    def is_whitelist_user(self, username):
+        """check if user is whitelist"""
+        return True if username in self.redis.smembers("whitelist") else False
 
     def wall(self, message):
         """send message to all admins"""
@@ -280,7 +289,7 @@ class ChatGPT(Plugin):
         """listen to everything and respond when mentioned"""
         if not self.is_user(message.sender_name):
             return
-        if message.is_direct_message and not self.is_admin(message.sender_name):
+        if message.is_direct_message and not self.is_admin(message.sender_name) and not self.is_whitelist_user(message.sender_name):
             return
         if message.text[0] == ".":  # ignore commands
             return
