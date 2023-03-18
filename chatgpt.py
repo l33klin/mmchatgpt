@@ -46,11 +46,11 @@ class ChatGPT(Plugin):
         if self.redis.scard("users") <= 0 and len(USERS) > 0:
             self.redis.sadd("users", *USERS)
         if self.redis.scard("whitelist") <= 0 and len(WHITELIST) > 0:
-            self.redis.sadd("whitelist", *USERS)
+            self.redis.sadd("whitelist", *WHITELIST)
         if self.redis.scard("admins") > 0 and len(ADMINS) > 0:
             self.redis.sadd("users", *ADMINS)
         if self.redis.scard("whitelist") > 0 and len(WHITELIST) > 0:
-            self.redis.sadd("users", *ADMINS)
+            self.redis.sadd("users", *WHITELIST)
         if openai_api_key is None:
             raise Exception("No OPENAI API key provided")
         if log_channel is None:
