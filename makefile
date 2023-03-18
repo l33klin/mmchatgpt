@@ -5,4 +5,4 @@ down: docker-compose.yaml
 	docker compose -p mmchatgpt up -d
 
 rebuild: docker-compose.yaml
-	docker compose -p mmchatgpt up -d --build
+	docker compose -p mmchatgpt up -d --build --force-recreate
