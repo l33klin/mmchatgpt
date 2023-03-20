@@ -188,7 +188,7 @@ class ChatGPT(Plugin):
             else:
                 self.driver.reply_to(message, f"Model not allowed: {model}")
 
-    @listen_to(".model get", allowed_users=["lbr"])
+    @listen_to(".model get", allowed_users=ADMINS)
     async def model_get(self, message: Message):
         """get the model"""
         if self.is_admin(message.sender_name):
