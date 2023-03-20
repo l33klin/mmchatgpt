@@ -10,7 +10,7 @@ from redis_rate_limit import RateLimit, TooManyRequests
 MODEL = "gpt-3.5-turbo-0301"
 ADMINS = ["l33klin"]  # put admins in here to prepopulate the redis db
 USERS = []  # put users in here to prepopulate the redis db
-WHITELIST = ['lr155']
+WHITELIST = ['lr155', 'hhua819', 'creat']
 REDIS_PREPEND = "thread_"
 PRICE_PER_TOKEN = 0.002/1000
 DOLLAR_TO_DKK = 6.5
