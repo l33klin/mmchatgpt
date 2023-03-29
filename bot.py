@@ -3,12 +3,20 @@
 from environs import Env
 from mmpy_bot import Bot, Settings
 from chatgpt import ChatGPT
+from model import RedisCfg
+
 env = Env()
 env.read_env()
 # log_channel = env.str("MM_BOT_LOG_CHANNEL")
 log_channel = None
 openai_api_key = env.str("OPENAI_API_KEY")
-redis_host = env.str("REDIS_HOST", "localhost")
+redis_cfg = RedisCfg(
+    host=env.str("REDISHOST", "localhost"),
+    port=env.int("REDISPORT", 6379),
+    username=env.str("REDISUSER", None),
+    password=env.str("REDISPASSWORD", None),
+    db=env.int("REDISDB", 0)
+)
 bot = Bot(
     settings=Settings(
         MATTERMOST_URL=env.str("MM_URL"),
@@ -19,6 +27,6 @@ bot = Bot(
         SSL_VERIFY=env.bool("MM_SSL_VERIFY", True),
     ),  # Either specify your settings here or as environment variables.
     # Add your own plugins here.
-    plugins=[ChatGPT(openai_api_key, log_channel, redis_host)],
+    plugins=[ChatGPT(openai_api_key, log_channel, redis_cfg._asdict())],
 )
 bot.run()
