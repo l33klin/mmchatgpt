@@ -292,6 +292,7 @@ class ChatGPT(Plugin):
         if message.is_direct_message and not self.is_admin(message.sender_name) and not self.is_whitelist_user(message.sender_name):
             return
         if message.text[0] == ".":  # ignore commands
+            self.driver.reply_to(message, "unsupport cmd")
             return
         msg = message.text
         thread_id = message.reply_id
