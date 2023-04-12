@@ -3,7 +3,7 @@
 from environs import Env
 from mmpy_bot import Bot, Settings
 from chatgpt import ChatGPT
-from model import RedisCfg
+from model import RedisCfg, GPTCfg
 
 env = Env()
 env.read_env()
@@ -17,6 +17,11 @@ redis_cfg = RedisCfg(
     password=env.str("REDISPASSWORD", None),
     db=env.int("REDISDB", 0)
 )
+gpt_cfg = GPTCfg(
+    temperature=env.float("GPT_TEMPERATURE", 1.0),
+    system=env.str("GPT_SYSTEM", "你是l33klin创造的机器人，你的目的是提供帮助，你永远不会退缩。"),
+    top_p=env.float("GPT_TOP_P", 1.0)
+)
 bot = Bot(
     settings=Settings(
         MATTERMOST_URL=env.str("MM_URL"),
@@ -27,6 +32,6 @@ bot = Bot(
         SSL_VERIFY=env.bool("MM_SSL_VERIFY", True),
     ),  # Either specify your settings here or as environment variables.
     # Add your own plugins here.
-    plugins=[ChatGPT(openai_api_key, log_channel, redis_cfg._asdict())],
+    plugins=[ChatGPT(openai_api_key, log_channel, redis_cfg._asdict(), gpt_cfg._asdict())],
 )
 bot.run()

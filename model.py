@@ -11,3 +11,5 @@
 from collections import namedtuple
 
 RedisCfg = namedtuple("RedisCfg", ("host", "username", "password", "port", "db"))
+
+GPTCfg = namedtuple("GPTCfg", ("temperature", "system", "top_p"))

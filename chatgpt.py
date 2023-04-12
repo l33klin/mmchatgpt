@@ -35,11 +35,13 @@ class ChatGPT(Plugin):
 
     SETTINGS_KEY = "chatgpt_settings"
 
-    def __init__(self, openai_api_key=None, log_channel=None, redis_cfg=None):
+    def __init__(self, openai_api_key=None, log_channel=None, redis_cfg=None, gpt_cfg=None):
         super().__init__()
         self.name = "ChatGPT"
         self.model = MODEL
         self.redis = redis.Redis(**redis_cfg, decode_responses=True)
+        if gpt_cfg:
+            ChatGPT.ChatGPT_DEFAULTS.update(gpt_cfg)
         if self.redis.scard("admins") <= 0 and len(ADMINS) > 0:
             self.redis.sadd("admins", *ADMINS)
         if self.redis.scard("users") <= 0 and len(USERS) > 0:
