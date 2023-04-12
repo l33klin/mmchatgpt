@@ -288,13 +288,12 @@ class ChatGPT(Plugin):
     @listen_to(".+", needs_mention=True)
     async def chat(self, message: Message):
         """listen to everything and respond when mentioned"""
-        self.print_msg_to_console(message)
+        self.log("{}: {}".format(message.sender_name, message.text))
         if not self.is_user(message.sender_name):
             return
         if message.is_direct_message and not self.is_admin(message.sender_name) and not self.is_whitelist_user(message.sender_name):
             return
         if message.text[0] == ".":  # ignore commands
-            self.driver.reply_to(message, "unsupport cmd")
             return
         msg = message.text
         thread_id = message.reply_id
