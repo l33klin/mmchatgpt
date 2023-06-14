@@ -19,9 +19,11 @@ REDIS_PORT = 6379
 
 class ChatGPT(Plugin):
     """mmypy chatgpt plugin"""
-    MODEL = "gpt-3.5-turbo-0301"
+    MODEL = "gpt-3.5-turbo-16k"
     ALLOWED_MODELS = [
         "gpt-3.5-turbo-0301",
+        "gpt-3.5-turbo-0613",
+        "gpt-3.5-turbo-16k",
         "gpt-3.5-turbo",
         "gpt-4",
         "gpt-4-32k",
