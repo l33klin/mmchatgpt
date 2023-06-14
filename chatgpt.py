@@ -174,14 +174,14 @@ class ChatGPT(Plugin):
             self.driver.reply_to(
                 message, f"Allowed admins: {self.redis.smembers('admins')}")
 
-    @listen_to(".models list")
+    @listen_to(".model list", allowed_users=ADMINS)
     async def model_list(self, message: Message):
         """list the models"""
         if self.is_admin(message.sender_name):
             self.driver.reply_to(
                 message, f"Allowed models: {self.ALLOWED_MODELS}")
 
-    @listen_to(".model set (.*)")
+    @listen_to(".model set (.*)", allowed_users=ADMINS)
     async def model_set(self, message: Message, model: str):
         """set the model"""
         if self.is_admin(message.sender_name):
@@ -195,7 +195,7 @@ class ChatGPT(Plugin):
     async def model_get(self, message: Message):
         """get the model"""
         if self.is_admin(message.sender_name):
-            self.driver.reply_to(message, f"Model: {MODEL}")
+            self.driver.reply_to(message, f"Model: {self.model}")
 
     @listen_to(".clear")
     async def clear(self, message: Message):
